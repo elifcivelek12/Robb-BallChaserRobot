@@ -1,0 +1,15 @@
+# ROS
+install/
+build/
+log/
+
+# C++
+*.swp
+*~
+
+# Python
+*.pyc
+__pycache__/
+
+# Backups
+*.*~
