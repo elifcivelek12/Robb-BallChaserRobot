@@ -1,13 +1,38 @@
 <?xml version="1.0" ?>
-<sdf version='1.6'>
+<sdf version='1.8'>
   <world name='default'>
+   
+    <!-- Physics plugin -->
+    <plugin
+      filename="libgz-sim-physics-system.so"
+      name="gz::sim::systems::Physics">
+    </plugin>
+
+    <!-- User Commands plugin (entity oluşturma için) -->
+    <plugin
+      filename="libgz-sim-user-commands-system.so"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+
+    <!-- Scene Broadcaster plugin -->
+    <plugin
+      filename="libgz-sim-scene-broadcaster-system.so"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+
+    <!-- Sensors plugin - Kamera sensörü için gerekli -->
+    <plugin
+      filename="libgz-sim-sensors-system.so"
+      name="gz::sim::systems::Sensors">
+    </plugin>
+
     <gravity>0 0 -9.8</gravity>
 
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
       <background>0.7 0.7 0.7 1</background>
       <shadows>true</shadows>
-    </scene>
+    </scene>  
 
     <physics name='default_physics' type='ode'>
       <max_step_size>0.001</max_step_size>
