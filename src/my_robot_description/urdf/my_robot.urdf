@@ -198,6 +198,7 @@
     <child link="left_wheel_link"/>
     <origin xyz="0 -0.11 -0.025" rpy="0 0 0"/> <!-- Chassis'in solunda, biraz aşağıda -->
     <axis xyz="0 1 0"/> <!-- Y ekseni etrafında döner (tekerlek dönme ekseni) -->
+    <limit effort="1.0" velocity="1.0"/>
   </joint>
 
   <!-- Sağ Tekerlek Eklemi -->
@@ -206,6 +207,7 @@
     <child link="right_wheel_link"/>
     <origin xyz="0 0.11 -0.025" rpy="0 0 0"/> <!-- Chassis'in sağında, biraz aşağıda -->
     <axis xyz="0 1 0"/>
+    <limit effort="1.0" velocity="1.0"/>
   </joint>
 
   <!-- Döner Tekerlek Eklemi -->
@@ -258,10 +260,23 @@
     <topic>/cmd_vel</topic>
     <odom_topic>/odom</odom_topic>
     <tf_topic>/tf</tf_topic>
+    <frame_id>odom</frame_id>
+    <child_frame_id>base_link</child_frame_id>
+    <publish_odom>true</publish_odom>
+    <publish_odom_tf>true</publish_odom_tf>
   </plugin>
 </gazebo>
-      
-      
+
+<!-- JOINT STATE PUBLISHER PLUGIN -->
+<!-- Gazebo'dan ROS'a joint_states yayınlar (tekerleklerin açısal pozisyonları) -->
+<gazebo>
+  <plugin
+    filename="libgz-sim-joint-state-publisher-system.so"
+    name="gz::sim::systems::JointStatePublisher">
+    <topic>joint_states</topic>
+    <update_rate>50</update_rate>
+  </plugin>
+</gazebo>
       
       
 

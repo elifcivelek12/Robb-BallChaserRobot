@@ -1,19 +1,31 @@
+#!/usr/bin/env python3
+"""
+GAZEBO WORLD LAUNCH FILE (Simülasyon Test Aracı)
+=================================================
+Bu launch dosyası sadece Gazebo simülasyonunu ve temel robot bileşenlerini başlatır.
+Hızlı test ve geliştirme için kullanılır.
+Ana sistem için bringup.launch.py kullanın.
+"""
+
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
 
-def generate_launch_description():
-    # Paketlerin paylaşım dizinlerini al
-    my_robot_description_path = get_package_share_directory('my_robot_description')
 
-    # URDF dosyasının yolunu al (my_robot.urdf kullanılıyor)
+def generate_launch_description():
+    """Gazebo test ortamını başlatır"""
+    
+    # Paket yolları
+    my_robot_description_path = get_package_share_directory('my_robot_description')
+    
+    # URDF dosyasını oku
     urdf_file_path = os.path.join(my_robot_description_path, 'urdf', 'my_robot.urdf')
     with open(urdf_file_path, 'r') as infp:
         robot_desc = infp.read()
-
-    # Gazebo'yu başlatma
+    
+    # Gazebo'yu başlat
     gazebo_launch = ExecuteProcess(
         cmd=[
             'gz', 'sim', '-r',
@@ -22,36 +34,41 @@ def generate_launch_description():
         ],
         output='screen'
     )
-
+    
     # Robot State Publisher
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
-        parameters=[{'robot_description': robot_desc}]
+        parameters=[{'robot_description': robot_desc, 'use_sim_time': True}]
     )
     
-    # Robotu Gazebo'da Spawn Etme
+    # Robotu Gazebo'da spawn et
     spawn_entity_node = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
-        arguments=['-string', robot_desc,
-                   '-name', 'my_robot',
-                   '-allow_renaming', 'true',
-                   '-z','0.1']
+        arguments=[
+            '-string', robot_desc,
+            '-name', 'my_robot',
+            '-allow_renaming', 'true',
+            '-z', '0.1'
+        ]
     )
     
-    # ROS-Gazebo Köprüsü (Kamera için)
+    # ROS-Gazebo köprüleri
     bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=[
-            '/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image'
-        ]
-    )  
-
+            '/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
+        ],
+        output='screen'
+    )
+    
     return LaunchDescription([
         gazebo_launch,
         robot_state_publisher_node,
