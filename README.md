@@ -2,7 +2,7 @@
 
 Bu proje, CSE412 Robotik Dersi kapsamında, ROS 2 Humble ve Gazebo Harmonic ortamında sıfırdan bir diferansiyel sürüşlü robot tasarlamayı, simüle etmeyi ve otonom olarak beyaz bir topu takip etmesini sağlamayı amaçlamaktadır.
 
-**YouTube Video Demo:** [Buraya YouTube Videonun Linkini Yapıştır]
+**YouTube Video Demo:** (https://youtu.be/-tYQ_jqmo_0)
 
 ![Robot Demo GIF](link_to_your_gif_or_screenshot.gif) 
 <!-- Opsiyonel: Projeden güzel bir anın GIF'ini veya ekran görüntüsünü buraya ekleyebilirsin. -->
